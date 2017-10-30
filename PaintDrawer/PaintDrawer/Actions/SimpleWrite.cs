@@ -5,6 +5,9 @@ namespace PaintDrawer.Actions
 {
     class SimpleWrite : IAction
     {
+        public const float DefaultSize = 90;
+        public static Vec2 DefaultAt = new Vec2(30, 200);
+
         CharFont font;
         String text;
         Vec2 at;
@@ -22,7 +25,7 @@ namespace PaintDrawer.Actions
         {
             this.font = font;
             this.text = text;
-            this.at = new Vec2(30, 200);
+            this.at = DefaultAt;
             this.size = size;
         }
 
@@ -30,13 +33,25 @@ namespace PaintDrawer.Actions
         {
             this.font = font;
             this.text = text;
-            this.at = new Vec2(30, 200);
-            this.size = 90;
+            this.at = DefaultAt;
+            this.size = DefaultSize;
         }
 
         public void Act()
         {
-            font.DrawWrapped(text, at, size, Stuff.ScreenWidth - at.X - 500);
+            font.DrawWrapped(text, at, size, Stuff.ScreenWidth - at.X - 120);
+        }
+
+        public static bool IsSizeOk(CharFont font, String text, Vec2 at, float size)
+        {
+            if (text.Length > 200)
+                return false;
+
+            Vec2 s;
+            if (font.CalculateDrawWrappedSize(text, at, size, Stuff.ScreenWidth - at.X - 120, out s))
+                return at.X + s.X < Stuff.ScreenWidth - 120 && at.Y + s.Y < Stuff.ScreenHeight - 120;
+            return false;
+
         }
     }
 }

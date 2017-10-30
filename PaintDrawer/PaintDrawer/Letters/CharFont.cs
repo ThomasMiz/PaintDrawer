@@ -57,7 +57,7 @@ namespace PaintDrawer.Letters
             {
                 String[] split = enterSplit[c].Split(' ');
                 Vec2[] measures = Measure(size, split);
-                float spaceWidth = Measure(size, "").X;
+                float spaceWidth = Measure(size, " ").X;
 
                 float buildWid = 0;
                 StringBuilder builder = new StringBuilder(128);
@@ -66,7 +66,7 @@ namespace PaintDrawer.Letters
                     float tmp = buildWid + measures[i].X;
                     if (tmp > width)
                     {
-                        Draw(builder.ToString(), at, size);
+                        _draw(builder.ToString(), at, size);
                         at.Y += MultilineDiffY * size;
                         builder.Clear();
                         builder.Append(split[i]);
@@ -107,6 +107,9 @@ namespace PaintDrawer.Letters
             float startX = at.X;
             for (int i = 0; i < text.Length; i++)
             {
+                if (text[i] == '\r')
+                    continue;
+
                 if (text[i] == '\n')
                 {
                     at.X = startX;
@@ -133,7 +136,10 @@ namespace PaintDrawer.Letters
 
             for (int i = 0; i < text.Length; i++)
             {
-                if (i == '\n')
+                if (text[i] == '\r')
+                    continue;
+
+                if (text[i] == '\n')
                 {
                     if (wid > s.X)
                         s.X = wid;
@@ -165,7 +171,7 @@ namespace PaintDrawer.Letters
         /// <param name="c">The char to check if exists, duh</param>
         public bool DoesCharExist(char c)
         {
-            return chars[(int)c] != null || c == '\n';
+            return chars[(int)c] != null || c == '\n' || c == '\r';
         }
 
         /// <summary>
@@ -178,6 +184,55 @@ namespace PaintDrawer.Letters
             for(int i=0; i<s.Length; i++)
                 if (!DoesCharExist(s[i]))
                     return false;
+            return true;
+        }
+
+
+        /// <summary>
+        /// Calculates the area required for DrawWrapped to work inside the screen bounds. Returns whether the text is valid
+        /// </summary>
+        public bool CalculateDrawWrappedSize(String text, Vec2 at, float size, float width, out Vec2 drawSize)
+        {
+            drawSize = new Vec2(0);
+
+            if (!IsStringOk(ref text))
+                return false;
+
+            String[] enterSplit = text.Split('\n');
+            for (int c = 0; c < enterSplit.Length; c++)
+            {
+                String[] split = enterSplit[c].Split(' ');
+                Vec2[] measures = Measure(size, split);
+                float spaceWidth = Measure(size, " ").X;
+
+                float buildWid = 0;
+                StringBuilder builder = new StringBuilder(128);
+                for (int i = 0; i < split.Length; i++)
+                {
+                    float tmp = buildWid + measures[i].X;
+                    if (tmp > width)
+                    {
+                        Draw(builder.ToString(), at, size);
+                        at.Y += MultilineDiffY * size;
+                        builder.Clear();
+                        builder.Append(split[i]);
+                        builder.Append(' ');
+                        buildWid = measures[i].X + spaceWidth;
+                        at.X = Math.Max(at.X, buildWid);
+                    }
+                    else
+                    {
+                        builder.Append(split[i]);
+                        builder.Append(' ');
+                        buildWid = tmp + spaceWidth;
+                        at.X = Math.Max(at.X, buildWid);
+                    }
+                }
+                
+                at.Y += MultilineDiffY * size;
+            }
+
+            drawSize.Y = at.Y;
             return true;
         }
     }

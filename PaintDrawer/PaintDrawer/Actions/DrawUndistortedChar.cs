@@ -20,6 +20,12 @@ namespace PaintDrawer.Actions
             scale = Math.Min((Stuff.ScreenWidth - at.X - 100) / character.Width, (Stuff.ScreenHeight - at.Y - 150) / character.Height);
         }
 
+        public DrawUndistortedChar(CharFont font, char c)
+            : this(font, SimpleWrite.DefaultAt, c)
+        {
+
+        }
+
         public void Act()
         {
             character.DrawUndistorted(at, scale);

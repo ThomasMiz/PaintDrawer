@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace PaintDrawer.GMail
     class Account
     {
         public static double lastRead, lastSuccessfullRead, lastMailRecieved;
+        public static String MyMailAddress = "insertyour@gmailaddress.com";
 
         public static UserCredential credential;
         public static GmailService service;
@@ -27,7 +29,8 @@ namespace PaintDrawer.GMail
             // GMail credentials should be stored in client_secret.json
             Console.ForegroundColor = Colors.Message;
             Console.WriteLine("[Gmail] Connecting to GMail API, loading credentials...");
-            
+
+            MyMailAddress = File.ReadAllText("mail.txt");
             using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
             {
                 String credPath = ".credentials/cred";
@@ -85,6 +88,7 @@ namespace PaintDrawer.GMail
                 }
                 catch (Exception e)
                 {
+                    Console.ForegroundColor = Colors.Error;
                     Console.WriteLine("[GMailAccount] ERROR: Coudln't read mails: (quote)\n" + e.Message + "(end quote).\nThere are " + tries + " tries left.");
                 }
                 tries--;
@@ -120,6 +124,37 @@ namespace PaintDrawer.GMail
 
             Console.ForegroundColor = Colors.Error;
             Console.WriteLine("[GMail] Couldn't trash mail id=" + id);
+            return false;
+        }
+
+        public static bool SendStatusTo(String address)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                try
+                {
+                    var msg = new AE.Net.Mail.MailMessage
+                    {
+                        Subject = "PaintDrawer Status Request",
+                        Body = "A PaintDrawer Status Request was recieved from this address.",
+                        From = new MailAddress(MyMailAddress)
+                    };
+                    msg.To.Add(new MailAddress(address));
+                    msg.ReplyTo.Add(msg.From); // Bounces without this!!
+                    var msgStr = new StringWriter();
+                    msg.Save(msgStr);
+
+                    GmailService gmail = Account.service;
+                    Message result = gmail.Users.Messages.Send(new Message { Raw = _base64UrlEncode(msgStr.ToString()) }, "me").Execute();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
             return false;
         }
 
@@ -219,6 +254,7 @@ namespace PaintDrawer.GMail
 
                                 if (m.Subject.Contains("TEXT"))
                                 {
+                                    #region WriteText
                                     int until = m.Text.Length - 1;
                                     while ((m.Text[until] == ' ' || m.Text[until] == '\n' || m.Text[until] == '\r') && until > 0) until--;
                                     int start = 0;
@@ -226,8 +262,37 @@ namespace PaintDrawer.GMail
 
                                     if (until > start && start >= 0 && until < m.Text.Length)
                                     {
-
+                                        String extract = m.Text.Substring(start, until - start + 1);
+                                        _addWrite(queue, ref extract);
                                     }
+                                    else
+                                    {
+                                        Console.ForegroundColor = Colors.Error;
+                                        Console.WriteLine("[GMail] Error parsing message.");
+                                    }
+                                    #endregion
+                                }
+                                else if (m.Subject.Contains("STATUS"))
+                                {
+                                    #region SendStatus
+                                    Console.ForegroundColor = Colors.Message;
+                                    Console.WriteLine("[GMail] Got Status Request from " + m.From);
+                                    if(SendStatusTo(m.From))
+                                    {
+                                        Console.ForegroundColor = Colors.Success;
+                                        Console.WriteLine("[GMail] Success sending status info to " + m.From);
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = Colors.Error;
+                                        Console.WriteLine("[GMail] ERROR: Couldn't send status info to " + m.From + ".");
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    Console.ForegroundColor = Colors.Message;
+                                    Console.WriteLine("[GMail] Message from=" + m.From + "; Subject=" + m.Subject + " has no meaning! Discarding.");
                                 }
 
                                 #endregion
@@ -255,7 +320,31 @@ namespace PaintDrawer.GMail
 
         private static void _addWrite(Queue<IAction> queue, ref String text)
         {
-            queue.Enqueue(new SimpleWrite(Program.font, text));
+            if (Program.font.IsStringOk(ref text))
+            {
+                if (SimpleWrite.IsSizeOk(Program.font, text, SimpleWrite.DefaultAt, SimpleWrite.DefaultSize))
+                    queue.Enqueue(new SimpleWrite(Program.font, text));
+                else
+                {
+                    Console.ForegroundColor = Colors.Error;
+                    Console.WriteLine("[GMail] Text not added. Reason: the text is too big!");
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = Colors.Error;
+                Console.WriteLine("[GMail] Text not added. Reason: not all characters were valid.");
+            }
+        }
+
+        private static string _base64UrlEncode(string input)
+        {
+            var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+            // Special "url-safe" base64 encode.
+            return Convert.ToBase64String(inputBytes)
+              .Replace('+', '-')
+              .Replace('/', '_')
+              .Replace("=", "");
         }
     }
 }

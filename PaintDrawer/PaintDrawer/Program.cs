@@ -16,6 +16,7 @@ namespace PaintDrawer
         public static Stopwatch watch;
         public static double Time { get { return watch.Elapsed.TotalSeconds; } }
         public static CharFont font;
+        public static Queue<IAction> queue;
 
         // Windows comlains if this isnt decorated with a STAThread
         [STAThread]
@@ -40,7 +41,7 @@ namespace PaintDrawer
                     Stopwatch watch = Stopwatch.StartNew();
                     while (Keyboard.IsKeyDown(Key.A) && Keyboard.IsKeyDown(Key.S) && Keyboard.IsKeyDown(Key.D))
                     {
-                        if (watch.ElapsedMilliseconds > 3000)
+                        if (watch.ElapsedMilliseconds > 2000)
                         {
                             t.Abort();
                             Console.ForegroundColor = Colors.Error;
@@ -104,18 +105,21 @@ namespace PaintDrawer
                 Thread.Sleep(100);
             }
 
-            //Input.PaintSelectBrush();
             watch = Stopwatch.StartNew();
-            Queue<IAction> queue = new Queue<IAction>(64);
+            queue = new Queue<IAction>(64);
             Console.ForegroundColor = Colors.Success;
             Console.WriteLine("Stopwatch started. Entering main loop...");
 
             while (true)
             {
+                Input.PaintSelectBrush();
+                new SimpleWrite(font, "hola a todos, este es un texto wrappeado en el paint xdxdxdxd").Act();
+                return;
+
                 Account.AddNewToQueue(queue);
                 //DateTime now = DateTime.Now;
                 //new SimpleWrite(Program.font, "Creo q me quede sin internet\n(" + now.Hour + ":" + now.Minute + ")").Act();
-                //new DrawUndistortedChar(font, new Vec2(50, 170), (char)4).Act();
+                //new DrawUndistortedChar(font, SimpleWrite.DefaultAt, (char)4).Act();
                 //return;
 
                 //Actions.Actions.RandomAction.Act();
