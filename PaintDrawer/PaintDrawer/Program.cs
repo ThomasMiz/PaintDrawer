@@ -7,45 +7,67 @@ using WindowScrape.Types;
 using System.Windows.Input;
 using PaintDrawer.Actions;
 using System.Collections.Generic;
+using PaintDrawer.GMail;
 
 namespace PaintDrawer
 {
-    static class Program
+    class Program
     {
+        public static Stopwatch watch;
+        public static double Time { get { return watch.Elapsed.TotalSeconds; } }
+        public static CharFont font;
+
         // Windows comlains if this isnt decorated with a STAThread
-        [STAThread] 
+        [STAThread]
         static void Main(string[] args)
         {
+            Console.ForegroundColor = Colors.Success;
             Console.WriteLine("Welcome to Paint Drawer V0.1!");
             //The drawing and stuff is in another thread
             Thread t = new Thread(ProcessStuff);
             t.Start();
 
             // The most cancer way to kill the program; literally kill it from another thread.
+            // Dont judge the code someone made way past midnight
             while (true)
             {
                 // Just press ASD at the same time and boom, you just fucked everything up :D
                 if (Keyboard.IsKeyDown(Key.A) && Keyboard.IsKeyDown(Key.S) && Keyboard.IsKeyDown(Key.D))
                 {
-                    t.Abort();
                     Console.ForegroundColor = Colors.Error;
-                    Console.WriteLine("[Main] Program has been killed.");
-                    Input.MouseUp();
-                    Console.ReadLine();
-                    return;
+                    Console.WriteLine("Keep holding ASD for 3 more seconds and the program dies!");
+
+                    Stopwatch watch = Stopwatch.StartNew();
+                    while (Keyboard.IsKeyDown(Key.A) && Keyboard.IsKeyDown(Key.S) && Keyboard.IsKeyDown(Key.D))
+                    {
+                        if (watch.ElapsedMilliseconds > 3000)
+                        {
+                            t.Abort();
+                            Console.ForegroundColor = Colors.Error;
+                            Console.WriteLine("[Main] Program has been killed. Easy GG, amiright?");
+                            Input.MouseUp();
+                            Console.ReadLine();
+                            return;
+                        }
+                        Thread.Sleep(1);
+                    }
+                    Console.ForegroundColor = Colors.Message;
+                    Console.WriteLine("Program abort canceled.");
                 }
                 Thread.Sleep(10);
             }
         }
 
-        /// <summary>
-        /// All the application runs in here while the main thread waits to maybe kill it.
-        /// </summary>
+        // This method processes the main program. Main() ends up keeping track of whether it should kill
+        // the program while this guy does all the actual hard work of drawing, checking mails, etc.
         static void ProcessStuff()
         {
             Stuff.Init();
 
-            CharFont font = new CharFont("CharFiles/MizConsole/");
+            Account.Init();
+
+            // Loads the font into memory from the .map files
+            font = new CharFont("CharFiles/MizConsole/");
             Actions.Actions.Init(font);
 
             Thread.Sleep(1000);
@@ -82,14 +104,21 @@ namespace PaintDrawer
                 Thread.Sleep(100);
             }
 
-            Input.PaintSelectBrush();
+            //Input.PaintSelectBrush();
+            watch = Stopwatch.StartNew();
+            Queue<IAction> queue = new Queue<IAction>(64);
+            Console.ForegroundColor = Colors.Success;
+            Console.WriteLine("Stopwatch started. Entering main loop...");
 
             while (true)
             {
-                new DrawUndistortedChar(font, new Vec2(50, 170), (char)4).Act();
-                return;
+                Account.AddNewToQueue(queue);
+                //DateTime now = DateTime.Now;
+                //new SimpleWrite(Program.font, "Creo q me quede sin internet\n(" + now.Hour + ":" + now.Minute + ")").Act();
+                //new DrawUndistortedChar(font, new Vec2(50, 170), (char)4).Act();
+                //return;
 
-                Actions.Actions.RandomAction.Act();
+                //Actions.Actions.RandomAction.Act();
 
                 Thread.Sleep(2500);
                 Input.PaintClearImage();

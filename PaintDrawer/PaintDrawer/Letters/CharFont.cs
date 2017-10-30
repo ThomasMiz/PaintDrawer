@@ -7,6 +7,8 @@ namespace PaintDrawer.Letters
 {
     class CharFont
     {
+        private const float MultilineDiffY = 1.4f;
+
         public Character[] chars;
 
         //Creates a CharFont from the given directory
@@ -65,7 +67,7 @@ namespace PaintDrawer.Letters
                     if (tmp > width)
                     {
                         Draw(builder.ToString(), at, size);
-                        at.Y += size;
+                        at.Y += MultilineDiffY * size;
                         builder.Clear();
                         builder.Append(split[i]);
                         builder.Append(' ');
@@ -79,7 +81,7 @@ namespace PaintDrawer.Letters
                     }
                 }
                 _draw(builder.ToString(), at, size);
-                at.Y += size;
+                at.Y += MultilineDiffY * size;
             }
         }
 
@@ -108,7 +110,7 @@ namespace PaintDrawer.Letters
                 if (text[i] == '\n')
                 {
                     at.X = startX;
-                    at.Y += size * chars[32].Height + size * 0.15f;
+                    at.Y += MultilineDiffY * size;
                 }
                 else
                 {
@@ -136,7 +138,7 @@ namespace PaintDrawer.Letters
                     if (wid > s.X)
                         s.X = wid;
                     wid = 0;
-                    s.Y += size;
+                    s.Y += MultilineDiffY * size;
                 }
                 else
                     wid += chars[text[i]].Width * size;
