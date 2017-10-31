@@ -5,20 +5,17 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using PaintDrawer.Actions;
 using System;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PaintDrawer.GMail
 {
     class Account
     {
-        public static double lastRead, lastSuccessfullRead, lastMailRecieved;
+        public static double LastRead, LastSuccessfullRead, LastMailRecieved;
         public static String MyMailAddress = "insertyour@gmailaddress.com";
 
         public static UserCredential credential;
@@ -61,7 +58,7 @@ namespace PaintDrawer.GMail
 
         public static List<RecievedMail> GetAllUnreadMails()
         {
-            lastRead = Program.Time;
+            LastRead = Program.Time;
             List<RecievedMail> mails = new List<RecievedMail>(32);
 
             UsersResource.MessagesResource.ListRequest request = Account.service.Users.Messages.List("me");
@@ -72,8 +69,8 @@ namespace PaintDrawer.GMail
                 for (int i = 0; i < response.Messages.Count; i++)
                     mails.Add(new RecievedMail(response.Messages[i].Id));
 
-            lastRead = Program.Time;
-            lastSuccessfullRead = lastRead;
+            LastRead = Program.Time;
+            LastSuccessfullRead = LastRead;
             return mails;
         }
 
@@ -133,10 +130,38 @@ namespace PaintDrawer.GMail
             {
                 try
                 {
+                    StringBuilder builder = new StringBuilder(512);
+                    IAction[] actions = Program.queue.ToArray();
+                    builder.Append("A PaintDrawer Status Request was recieved from this address.\r\nQueue<IAction>().ToArray() returned: {");
+                    for (int a = 0; a < actions.Length; a++)
+                    {
+                        builder.Append("    ");
+                        builder.Append(actions[a].ToString());
+                        builder.Append("\r\n");
+                    }
+                    builder.Append("}\r\nThat is a total of ");
+                    builder.Append(actions.Length);
+                    builder.Append(" IAction-s.\r\n\r\n");
+
+                    builder.Append("Program.Time = ");
+                    builder.Append(Program.Time);
+
+                    builder.Append("\r\nProgram.LastDraw = ");
+                    builder.Append(Program.LastDraw);
+
+                    builder.Append("\r\nAccount.LastMailRecieved = ");
+                    builder.Append(Account.LastMailRecieved);
+
+                    builder.Append("\r\nAccount.LastRead = ");
+                    builder.Append(Account.LastRead);
+
+                    builder.Append("\r\nAccount.LastSuccessfullRead = ");
+                    builder.Append(Account.LastSuccessfullRead);
+                    
                     var msg = new AE.Net.Mail.MailMessage
                     {
                         Subject = "PaintDrawer Status Request",
-                        Body = "A PaintDrawer Status Request was recieved from this address.",
+                        Body = builder.ToString(),
                         From = new MailAddress(MyMailAddress)
                     };
                     msg.To.Add(new MailAddress(address));
@@ -173,7 +198,7 @@ namespace PaintDrawer.GMail
                 }
                 else
                 {
-                    lastMailRecieved = Program.Time;
+                    LastMailRecieved = Program.Time;
 
                     #region ProcessMails
                     for (int i=0; i<mails.Count; i++)
@@ -263,6 +288,8 @@ namespace PaintDrawer.GMail
                                     if (until > start && start >= 0 && until < m.Text.Length)
                                     {
                                         String extract = m.Text.Substring(start, until - start + 1);
+                                        Console.ForegroundColor = Colors.Success;
+                                        Console.WriteLine("[GMail] Extracted: " + extract);
                                         _addWrite(queue, ref extract);
                                     }
                                     else
@@ -289,6 +316,54 @@ namespace PaintDrawer.GMail
                                     }
                                     #endregion
                                 }
+                                else if (m.Subject.Contains("DRAW"))
+                                {
+                                    #region Draw
+                                    if (String.IsNullOrEmpty(m.Text))
+                                    {
+                                        Console.ForegroundColor = Colors.Error;
+                                        Console.WriteLine("[GMail] Error parsing message.");
+                                    }
+                                    else
+                                    {
+                                        if (m.Text.Contains("ANGRY_CROMULON"))
+                                        {
+                                            queue.Enqueue(new DrawUndistortedChar(Program.font, (char)4));
+                                            Console.ForegroundColor = Colors.Success;
+                                            Console.WriteLine("[GMail] DRAW Command: ANGRY_CROMULON Enqueued.");
+                                        }
+                                        else if (m.Text.Contains("LOLO"))
+                                        {
+                                            queue.Enqueue(new DrawUndistortedChar(Program.font, (char)3));
+                                            Console.ForegroundColor = Colors.Success;
+                                            Console.WriteLine("[GMail] DRAW Command: LOLO Enqueued.");
+                                        }
+                                        else if (m.Text.Contains("CWMAP"))
+                                        {
+                                            queue.Enqueue(new DrawUndistortedChar(Program.font, (char)0));
+                                            Console.ForegroundColor = Colors.Success;
+                                            Console.WriteLine("[GMail] DRAW Command: CWMAP Enqueued.");
+                                        }
+                                        else if (m.Text.Contains("REALMEN"))
+                                        {
+                                            queue.Enqueue(new DrawUndistortedChar(Program.font, (char)2));
+                                            Console.ForegroundColor = Colors.Success;
+                                            Console.WriteLine("[GMail] DRAW Command: REALMEN Enqueued.");
+                                        }
+                                        else if (m.Text.Contains("CUAC"))
+                                        {
+                                            queue.Enqueue(new DrawUndistortedChar(Program.font, (char)1));
+                                            Console.ForegroundColor = Colors.Success;
+                                            Console.WriteLine("[GMail] DRAW Command: CUAC Enqueued.");
+                                        }
+                                        else
+                                        {
+                                            Console.ForegroundColor = Colors.Error;
+                                            Console.WriteLine("[GMail] DRAW Command Error: No such drawable found.");
+                                        }
+                                    }
+                                    #endregion
+                                }
                                 else
                                 {
                                     Console.ForegroundColor = Colors.Message;
@@ -300,7 +375,7 @@ namespace PaintDrawer.GMail
                         }
                         #endregion
 
-                        //ForceTrashMail(m.Id, 5);
+                        ForceTrashMail(m.Id, 5);
                     }
                     #endregion
                 }
@@ -308,7 +383,7 @@ namespace PaintDrawer.GMail
             else
             {
                 // if more than 3 minutes passed since it was able to read mails, we might have gotten disconnected...
-                if (lastRead - lastSuccessfullRead > 3)
+                if (LastRead - LastSuccessfullRead > 3)
                 {
                     Console.ForegroundColor = Colors.Error;
                     DateTime now = DateTime.Now;

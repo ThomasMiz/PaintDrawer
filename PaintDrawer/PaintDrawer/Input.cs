@@ -13,6 +13,8 @@ namespace PaintDrawer
         const float MoveDistanceSquared = MoveDistance * MoveDistance, MoreDistanceSquared = MoreDistance * MoreDistance;
         const int SLPTime = 16;
 
+        public const bool PRINT_MOVES = false;
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
@@ -131,7 +133,8 @@ namespace PaintDrawer
 
             while (true)
             {
-                Console.ForegroundColor = Colors.Normal;
+                if (PRINT_MOVES)
+                    Console.ForegroundColor = Colors.Normal;
 
                 distLeft = MoveDistance;
                 distToVertex = Stuff.Distance(Cursor.Position, vertices[index]);
@@ -139,7 +142,8 @@ namespace PaintDrawer
                 {
                     if (distLeft < distToVertex)
                     {
-                        Console.WriteLine("[Input] (" + index + ") Moved by " + distLeft);
+                        if (PRINT_MOVES)
+                            Console.WriteLine("[Input] (" + index + ") Moved by " + distLeft);
                         MoveBy(vertices[index], distLeft);
                         distLeft = 0;
                     }
@@ -147,13 +151,15 @@ namespace PaintDrawer
                     {
                         while (distLeft >= distToVertex)
                         {
-                            Console.WriteLine("[Input] (" + index + ") Closed at " + distToVertex);
+                            if (PRINT_MOVES)
+                                Console.WriteLine("[Input] (" + index + ") Closed at " + distToVertex);
                             distLeft -= distToVertex;
                             Cursor.Position = vertices[index];
                             index++;
                             if (index == vertices.Length)
                             {
-                                Console.WriteLine("[Input] Linegroup size " + vertices.Length + " done.");
+                                if (PRINT_MOVES)
+                                    Console.WriteLine("[Input] Linegroup size " + vertices.Length + " done.");
                                 MouseUp();
                                 return;
                             }
@@ -163,8 +169,12 @@ namespace PaintDrawer
                         }
                     }
                 }
-                Console.ForegroundColor = Colors.Message;
-                Console.WriteLine("[Input] slept.");
+
+                if (PRINT_MOVES)
+                {
+                    Console.ForegroundColor = Colors.Message;
+                    Console.WriteLine("[Input] slept.");
+                }
                 Thread.Sleep(SLPTime);
             }
         }

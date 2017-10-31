@@ -7,11 +7,13 @@ namespace PaintDrawer.Letters
 {
     class Character
     {
+        String name;
         float width, height;
         Vec2[][] lines;
 
         public float Width { get { return width; } }
         public float Height { get { return height; } }
+        public String Name { get { return name; } }
 
         public Character(String file)
         {
@@ -26,7 +28,7 @@ namespace PaintDrawer.Letters
             stream.ReadByte(); //V1
             stream.ReadByte(); //V2
 
-            stream.ReadString(); //name
+            name = stream.ReadString(); //name
 
             stream.ReadByte(); //bg
 

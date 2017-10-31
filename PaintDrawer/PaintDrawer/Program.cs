@@ -15,6 +15,7 @@ namespace PaintDrawer
     {
         public static Stopwatch watch;
         public static double Time { get { return watch.Elapsed.TotalSeconds; } }
+        public static double LastDraw = 0;
         public static CharFont font;
         public static Queue<IAction> queue;
 
@@ -22,6 +23,12 @@ namespace PaintDrawer
         [STAThread]
         static void Main(string[] args)
         {
+            if ((int)DateTime.Now.DayOfWeek == 3)
+            {
+                Console.ForegroundColor = Colors.Success;
+                Console.WriteLine("it is wednesday, my dudes\n");
+            }
+
             Console.ForegroundColor = Colors.Success;
             Console.WriteLine("Welcome to Paint Drawer V0.1!");
             //The drawing and stuff is in another thread
@@ -110,23 +117,32 @@ namespace PaintDrawer
             Console.ForegroundColor = Colors.Success;
             Console.WriteLine("Stopwatch started. Entering main loop...");
 
+            Input.PaintSelectBrush();
+            new SimpleWrite(font, "Welcome to PaintDrawer! What shall I draw for you, kind sir?").Act();
+
             while (true)
             {
-                Input.PaintSelectBrush();
-                new SimpleWrite(font, "hola a todos, este es un texto wrappeado en el paint xdxdxdxd").Act();
-                return;
-
                 Account.AddNewToQueue(queue);
-                //DateTime now = DateTime.Now;
-                //new SimpleWrite(Program.font, "Creo q me quede sin internet\n(" + now.Hour + ":" + now.Minute + ")").Act();
-                //new DrawUndistortedChar(font, SimpleWrite.DefaultAt, (char)4).Act();
+
+                if (queue.Count == 0 && Time - LastDraw > 5*60)
+                {
+                    // More than X minutes passed since the last draw! Let's add something random then...
+                    queue.Enqueue(Actions.Actions.RandomAction);
+                }
+
+                if (queue.Count != 0 && Time - LastDraw > 1*60)
+                {
+                    // Give all texts at least a minute before erasing 'em... and drawing something else
+                    Input.PaintClearImage();
+                    Input.PaintSelectBrush();
+                    LastDraw = Time;
+                    queue.Dequeue().Act();
+                }
+                else
+                    Thread.Sleep(5000);
+
+                //new SimpleWrite(font, "hola a todos, este es un texto wrappeado en el paint xdxdxdxd.e\nSi no les gusta, pija.\n\njejejejeje hue hue hue hue hue hue hue hue").Act();
                 //return;
-
-                //Actions.Actions.RandomAction.Act();
-
-                Thread.Sleep(2500);
-                Input.PaintClearImage();
-                Input.PaintSelectBrush();
             }
         }
 

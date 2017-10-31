@@ -53,18 +53,21 @@ namespace PaintDrawer.Letters
             }
 
             String[] enterSplit = text.Split('\n');
+            float spaceWidth = Measure(size, " ").X;
+            width -= spaceWidth;
+
             for (int c = 0; c < enterSplit.Length; c++)
             {
                 String[] split = enterSplit[c].Split(' ');
                 Vec2[] measures = Measure(size, split);
-                float spaceWidth = Measure(size, " ").X;
 
                 float buildWid = 0;
                 StringBuilder builder = new StringBuilder(128);
                 for (int i = 0; i < split.Length; i++)
                 {
                     float tmp = buildWid + measures[i].X;
-                    if (tmp > width)
+                    float xd = Measure(size, builder.ToString()).X;
+                    if (tmp >= width)
                     {
                         _draw(builder.ToString(), at, size);
                         at.Y += MultilineDiffY * size;
@@ -209,10 +212,12 @@ namespace PaintDrawer.Letters
                 StringBuilder builder = new StringBuilder(128);
                 for (int i = 0; i < split.Length; i++)
                 {
+                    if (measures[i].X > width)
+                        return false;
+
                     float tmp = buildWid + measures[i].X;
                     if (tmp > width)
                     {
-                        Draw(builder.ToString(), at, size);
                         at.Y += MultilineDiffY * size;
                         builder.Clear();
                         builder.Append(split[i]);

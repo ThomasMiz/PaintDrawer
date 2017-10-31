@@ -51,7 +51,11 @@ namespace PaintDrawer.Actions
             if (font.CalculateDrawWrappedSize(text, at, size, Stuff.ScreenWidth - at.X - 120, out s))
                 return at.X + s.X < Stuff.ScreenWidth - 120 && at.Y + s.Y < Stuff.ScreenHeight - 120;
             return false;
+        }
 
+        public override string ToString()
+        {
+            return String.Concat("SimpleWrite text=", text, "; at=", at.ToString(), "; size=", size);
         }
     }
 }
