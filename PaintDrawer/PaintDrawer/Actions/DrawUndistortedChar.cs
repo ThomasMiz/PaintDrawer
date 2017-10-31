@@ -35,7 +35,7 @@ namespace PaintDrawer.Actions
 
         public override string ToString()
         {
-            return String.Concat("DrawUndistortedChar c=", c, " (", character.Name, ")");
+            return String.Concat("DrawUndistortedChar (int)c=", (int)c, " (", character.Name, ")");
         }
     }
 }
