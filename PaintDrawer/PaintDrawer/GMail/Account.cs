@@ -189,6 +189,7 @@ namespace PaintDrawer.GMail
         /// <param name="queue">... the fucking queue</param>
         public static void AddNewToQueue(Queue<IAction> queue)
         {
+            List<String> statusToList = new List<string>(3);
             List<RecievedMail> mails;
             if (ForceGetAllUnreadMails(5, out mails))
             {
@@ -302,18 +303,7 @@ namespace PaintDrawer.GMail
                                 else if (m.Subject.Contains("STATUS"))
                                 {
                                     #region SendStatus
-                                    Console.ForegroundColor = Colors.Message;
-                                    Console.WriteLine("[GMail] Got Status Request from " + m.From);
-                                    if(SendStatusTo(m.From))
-                                    {
-                                        Console.ForegroundColor = Colors.Success;
-                                        Console.WriteLine("[GMail] Success sending status info to " + m.From);
-                                    }
-                                    else
-                                    {
-                                        Console.ForegroundColor = Colors.Error;
-                                        Console.WriteLine("[GMail] ERROR: Couldn't send status info to " + m.From + ".");
-                                    }
+                                    statusToList.Add(m.From);
                                     #endregion
                                 }
                                 else if (m.Subject.Contains("DRAW"))
@@ -375,7 +365,26 @@ namespace PaintDrawer.GMail
                         }
                         #endregion
 
-                        ForceTrashMail(m.Id, 5);
+                        //ForceTrashMail(m.Id, 5);
+                    }
+                    #endregion
+
+                    #region RespondStatusRequests
+                    for (int i = 0; i < statusToList.Count; i++)
+                    {
+                        String f = statusToList[i];
+                        Console.ForegroundColor = Colors.Message;
+                        Console.WriteLine("[GMail] Got Status Request from " + f);
+                        if (SendStatusTo(f))
+                        {
+                            Console.ForegroundColor = Colors.Success;
+                            Console.WriteLine("[GMail] Success sending status info to " + f);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = Colors.Error;
+                            Console.WriteLine("[GMail] ERROR: Couldn't send status info to " + f + ".");
+                        }
                     }
                     #endregion
                 }
@@ -383,7 +392,7 @@ namespace PaintDrawer.GMail
             else
             {
                 // if more than 3 minutes passed since it was able to read mails, we might have gotten disconnected...
-                if (LastRead - LastSuccessfullRead > 3)
+                if (LastRead - LastSuccessfullRead > 3*60 && queue.Count == 0 && Program.Time - Program.LastDraw > 5*60)
                 {
                     Console.ForegroundColor = Colors.Error;
                     DateTime now = DateTime.Now;

@@ -118,7 +118,7 @@ namespace PaintDrawer
             Console.WriteLine("Stopwatch started. Entering main loop...");
 
             Input.PaintSelectBrush();
-            new SimpleWrite(font, "Welcome to PaintDrawer! What shall I draw for you, kind sir?").Act();
+            //new SimpleWrite(font, "Welcome to PaintDrawer! What shall I draw for you, kind sir?").Act();
 
             while (true)
             {

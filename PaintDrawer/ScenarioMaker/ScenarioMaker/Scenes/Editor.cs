@@ -198,11 +198,9 @@ namespace ScenarioMaker.Scenes
         {
             FileStream strm = FindImage();
             if (strm == null)
-            {
-                Game1.game.Exit();
-                return;
-            }
-            LEL = Texture2D.FromStream(Game1.game.GraphicsDevice, strm);
+                LEL = null;
+            else
+                LEL = Texture2D.FromStream(Game1.game.GraphicsDevice, strm);
             Stuff.editor = this;
             shapes = new List<Shape>(200);
             menuSize.Y = 150;
@@ -406,9 +404,12 @@ namespace ScenarioMaker.Scenes
         {
             device.Clear(Game1.BackColor);
 
-            batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, cameraView);
-            batch.Draw(LEL, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 0.338541f, SpriteEffects.None, 0f);
-            batch.End();
+            if (LEL != null)
+            {
+                batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, cameraView);
+                batch.Draw(LEL, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 0.338541f, SpriteEffects.None, 0f);
+                batch.End();
+            }
 
             effect.CurrentTechnique.Passes[0].Apply();
 
@@ -672,7 +673,8 @@ namespace ScenarioMaker.Scenes
 
         public override void OnExit()
         {
-            LEL.Dispose();
+            if (LEL != null)
+                LEL.Dispose();
             AutoSaveThread.Abort();
         }
 
