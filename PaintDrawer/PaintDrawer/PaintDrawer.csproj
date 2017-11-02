@@ -175,7 +175,13 @@
     <None Include="CharFiles\MizConsole\122%3b z.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CharFiles\MizConsole\123%3b {.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CharFiles\MizConsole\124%3b BAR.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\125%3b }.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CharFiles\MizConsole\126%3b ~.map">
@@ -299,12 +305,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CharFiles\MizConsole\960%3b π.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CharFiles\MizConsole\249%3b . .map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="CharFiles\MizConsole\250%3b . .map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CharFiles\MizConsole\3%3b lolo.map">

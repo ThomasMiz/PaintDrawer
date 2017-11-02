@@ -365,7 +365,7 @@ namespace PaintDrawer.GMail
                         }
                         #endregion
 
-                        //ForceTrashMail(m.Id, 5);
+                        ForceTrashMail(m.Id, 5);
                     }
                     #endregion
 
