@@ -181,112 +181,124 @@
     <None Include="CharFiles\MizConsole\126%3b ~.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\128%3b Ç.map">
+    <None Include="CharFiles\MizConsole\199%3b Ç.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\129%3b ü.map">
+    <None Include="CharFiles\MizConsole\236%3b ì.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\130%3b é.map">
+    <None Include="CharFiles\MizConsole\237%3b í.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\131%3b â.map">
+    <None Include="CharFiles\MizConsole\238%3b î.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\132%3b ä.map">
+    <None Include="CharFiles\MizConsole\239%3b ï.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\133%3b à.map">
+    <None Include="CharFiles\MizConsole\252%3b ü.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\134%3b å.map">
+    <None Include="CharFiles\MizConsole\233%3b é.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\135%3b ç.map">
+    <None Include="CharFiles\MizConsole\226%3b â.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\136%3b ê.map">
+    <None Include="CharFiles\MizConsole\228%3b ä.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\137%3b ë.map">
+    <None Include="CharFiles\MizConsole\224%3b à.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\138%3b è.map">
+    <None Include="CharFiles\MizConsole\229%3b å.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\139%3b ï.map">
+    <None Include="CharFiles\MizConsole\231%3b ç.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\140%3b î.map">
+    <None Include="CharFiles\MizConsole\234%3b ê.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\141%3b ì.map">
+    <None Include="CharFiles\MizConsole\235%3b ë.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\142%3b Ä.map">
+    <None Include="CharFiles\MizConsole\232%3b è.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\143%3b Å.map">
+    <None Include="CharFiles\MizConsole\207%3b ï.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\144%3b É.map">
+    <None Include="CharFiles\MizConsole\206%3b î.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\147%3b ô.map">
+    <None Include="CharFiles\MizConsole\204%3b ì.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\148%3b ö.map">
+    <None Include="CharFiles\MizConsole\196%3b Ä.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\149%3b ò.map">
+    <None Include="CharFiles\MizConsole\194%3b Å.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\150%3b û.map">
+    <None Include="CharFiles\MizConsole\201%3b É.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\151%3b ù.map">
+    <None Include="CharFiles\MizConsole\244%3b ô.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\152%3b ÿ.map">
+    <None Include="CharFiles\MizConsole\246%3b ö.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\153%3b Ö.map">
+    <None Include="CharFiles\MizConsole\242%3b ò.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\154%3b ñ.map">
+    <None Include="CharFiles\MizConsole\251%3b û.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\154%3b Ü.map">
+    <None Include="CharFiles\MizConsole\249%3b ù.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\160%3b á.map">
+    <None Include="CharFiles\MizConsole\255%3b ÿ.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\161%3b í.map">
+    <None Include="CharFiles\MizConsole\214%3b Ö.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\162%3b ó.map">
+    <None Include="CharFiles\MizConsole\241%3b ñ.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\163%3b ú.map">
+    <None Include="CharFiles\MizConsole\220%3b Ü.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\165%3b Ñ.map">
+    <None Include="CharFiles\MizConsole\225%3b á.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\167%3b º.map">
+    <None Include="CharFiles\MizConsole\205%3b í.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\168%3b INVERSEQUESTIONMARK.map">
+    <None Include="CharFiles\MizConsole\243%3b ó.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\173%3b INVERSE!.map">
+    <None Include="CharFiles\MizConsole\250%3b ú.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\209%3b Ñ.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\176%3b º.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\191%3b INVERSEQUESTIONMARK.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\161%3b INVERSE!.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CharFiles\MizConsole\2%3b mazal.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\227%3b π.map">
+    <None Include="CharFiles\MizConsole\960%3b π.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="CharFiles\MizConsole\249%3b . .map">

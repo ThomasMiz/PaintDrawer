@@ -32,7 +32,7 @@ namespace PaintDrawer.Letters
                 String f = files[i].Substring(files[i].LastIndexOf('/') + 1);
                 int fi = f.IndexOf(';');
                 int res;
-                if (Int32.TryParse(f.Substring(0, fi), out res))
+                if (Int32.TryParse(f.Substring(0, fi), out res) && res > 0 && res < chars.Length)
                     chars[res] = new Character(files[i]);
             }
 
