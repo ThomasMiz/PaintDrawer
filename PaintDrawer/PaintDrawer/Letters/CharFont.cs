@@ -7,6 +7,7 @@ namespace PaintDrawer.Letters
 {
     class CharFont
     {
+        public const int MaxCharNumericValue = 1024;
         private const float MultilineDiffY = 1.4f;
 
         public Character[] chars;
@@ -24,7 +25,7 @@ namespace PaintDrawer.Letters
                 throw new DirectoryNotFoundException(folder);
             }
 
-            chars = new Character[255];
+            chars = new Character[MaxCharNumericValue];
             String[] files = Directory.GetFiles(folder);
 
             for (int i = 0; i < files.Length; i++)
@@ -32,8 +33,16 @@ namespace PaintDrawer.Letters
                 String f = files[i].Substring(files[i].LastIndexOf('/') + 1);
                 int fi = f.IndexOf(';');
                 int res;
-                if (Int32.TryParse(f.Substring(0, fi), out res) && res > 0 && res < chars.Length)
-                    chars[res] = new Character(files[i]);
+                if (Int32.TryParse(f.Substring(0, fi), out res) && res > 0 && res < MaxCharNumericValue)
+                {
+                    if (chars[res] == null)
+                        chars[res] = new Character(files[i]);
+                    else
+                    {
+                        Console.ForegroundColor = Colors.Message;
+                        Console.WriteLine("[CharFont] Warning! Character " + res + " or '" + ((char)res) + "' is defined more than once!");
+                    }
+                }
             }
 
             Console.ForegroundColor = Colors.Success;
@@ -174,7 +183,8 @@ namespace PaintDrawer.Letters
         /// <param name="c">The char to check if exists, duh</param>
         public bool DoesCharExist(char c)
         {
-            return chars[(int)c] != null || c == '\n' || c == '\r';
+            int i = (int)c;
+            return (i < MaxCharNumericValue && chars[i] != null) || c == '\n' || c == '\r';
         }
 
         /// <summary>

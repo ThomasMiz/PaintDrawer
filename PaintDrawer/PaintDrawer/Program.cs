@@ -139,7 +139,7 @@ namespace PaintDrawer
                     queue.Dequeue().Act();
                 }
                 else
-                    Thread.Sleep(5000);
+                    Thread.Sleep(2000);
 
                 //new SimpleWrite(font, "hola a todos, este es un texto wrappeado en el paint xdxdxdxd.e\nSi no les gusta, pija.\n\njejejejeje hue hue hue hue hue hue hue hue").Act();
                 //return;
