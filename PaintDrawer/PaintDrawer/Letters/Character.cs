@@ -85,14 +85,14 @@ namespace PaintDrawer.Letters
         /// <param name="size">The height in pixels characters should have</param>
         public void DrawDistorted(Vec2 at, float size)
         {
-            float multX = Stuff.Random(0.05f, 0.1f); // these values are used for distortion
-            float multY = Stuff.Random(0.05f, 0.1f);
+            float multX = Stuff.Random(0.033f, 0.05f); // these values are used for distortion
+            float multY = Stuff.Random(0.033f, 0.05f);
 
             float defX = Stuff.Random(6.29f);
             float defY = Stuff.Random(6.29f);
 
-            float bulX = Stuff.Random(0.5f, 1.5f) * 6.29f;
-            float bulY = Stuff.Random(0.5f, 1.5f) * 6.29f;
+            float bulX = Stuff.Random(0.75f, 1.15f) * 6.29f;
+            float bulY = Stuff.Random(0.75f, 1.15f) * 6.29f;
 
             // for each line group
             for (int i = 0; i < lines.Length; i++)

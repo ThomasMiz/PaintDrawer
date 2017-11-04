@@ -10,7 +10,7 @@ namespace PaintDrawer.Letters
         /// <summary>The maximum numeric value of characters the font can hold</summary>
         public const int MaxCharNumericValue = 1024;
 
-        private const float MultilineDiffY = 1.4f;
+        private const float MultilineDiffY = 1.4f, WidthMult = 1.1f;
 
         public Character[] chars;
 
@@ -35,7 +35,7 @@ namespace PaintDrawer.Letters
                 String f = files[i].Substring(files[i].LastIndexOf('/') + 1);
                 int fi = f.IndexOf(';');
                 int res;
-                if (Int32.TryParse(f.Substring(0, fi), out res) && res > 0 && res < MaxCharNumericValue)
+                if (Int32.TryParse(f.Substring(0, fi), out res) && res >= 0 && res < MaxCharNumericValue)
                 {
                     if (chars[res] == null)
                         chars[res] = new Character(files[i]);
@@ -45,6 +45,10 @@ namespace PaintDrawer.Letters
                         Console.WriteLine("[CharFont] Warning! Character " + res + " or '" + ((char)res) + "' is defined more than once!");
                     }
                 }
+                else
+                {
+
+                }
             }
 
             Console.ForegroundColor = Colors.Success;
@@ -52,7 +56,8 @@ namespace PaintDrawer.Letters
         }
 
         /// <summary>
-        /// Draws a text wrapped in a certain space. Doesn't support splits with measure larget than width.
+        /// Draws a text wrapped in a certain space. Will not check for text overflow to the bottom of the screen,
+        /// use CalculateDrawWrappedSize to check that.
         /// </summary>
         public void DrawWrapped(String text, Vec2 at, float size, float width)
         {
@@ -63,40 +68,68 @@ namespace PaintDrawer.Letters
                 return;
             }
 
-            String[] enterSplit = text.Split('\n');
-            float spaceWidth = Measure(size, " ").X;
-            width -= spaceWidth;
+            int nextStartChar = 0, lastSpace = 0, from, to;
+            float builWid = 0;
 
-            for (int c = 0; c < enterSplit.Length; c++)
+            for (int i = 0; i < text.Length; i++)
             {
-                String[] split = enterSplit[c].Split(' ');
-                Vec2[] measures = Measure(size, split);
+                if (text[i] == '\r')
+                    continue;
 
-                float buildWid = 0;
-                StringBuilder builder = new StringBuilder(128);
-                for (int i = 0; i < split.Length; i++)
+                if (text[i] == ' ')
+                    lastSpace = i;
+
+                if (text[i] == '\n')
                 {
-                    float tmp = buildWid + measures[i].X;
-                    float xd = Measure(size, builder.ToString()).X;
-                    if (tmp >= width)
+                    // flush
+                    from = nextStartChar;
+                    to = lastSpace;
+                    if (from >= to)
                     {
-                        _draw(builder.ToString(), at, size);
+                        // no spaces? oh well, cut it in half.
+                        to = i - 1;
+                    }
+                    if (to > from)
+                        _draw(text.Substring(from, to - from), at, size);
+
+                    nextStartChar = Math.Max(to, 0);
+                    while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                    lastSpace = nextStartChar;
+                    at.Y += MultilineDiffY * size;
+                    builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
+                }
+                else
+                {
+                    float tmp = builWid + Measure(size, text[i]);
+                    if (tmp > width)
+                    {
+                        // flush
+                        from = nextStartChar;
+                        to = lastSpace;
+                        if (from >= to)
+                        {
+                            // no spaces? oh well, cut it in half.
+                            to = i - 1;
+                        }
+                        if (to > from)
+                            _draw(text.Substring(from, to - from), at, size);
+
+                        nextStartChar = Math.Max(to, 0);
+                        while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                        lastSpace = nextStartChar;
                         at.Y += MultilineDiffY * size;
-                        builder.Clear();
-                        builder.Append(split[i]);
-                        builder.Append(' ');
-                        buildWid = measures[i].X + spaceWidth;
+                        builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
                     }
                     else
-                    {
-                        builder.Append(split[i]);
-                        builder.Append(' ');
-                        buildWid = tmp + spaceWidth;
-                    }
+                        builWid = tmp;
                 }
-                _draw(builder.ToString(), at, size);
-                at.Y += MultilineDiffY * size;
             }
+
+            // flush
+            from = nextStartChar;
+            to = text.Length;
+            if (to > from)
+                _draw(text.Substring(from, to - from), at, size);
         }
 
         /// <summary>
@@ -124,7 +157,7 @@ namespace PaintDrawer.Letters
             float startX = at.X;
             for (int i = 0; i < text.Length; i++)
             {
-                if (text[i] == '\r')
+                if (text[i] == '\r') //say the fuck you want, a quick google search said this is ok.
                     continue;
 
                 if (text[i] == '\n')
@@ -136,16 +169,17 @@ namespace PaintDrawer.Letters
                 {
                     int index = (int)text[i];
                     chars[index].DrawDistorted(at, size);
-                    at.X += chars[index].Width * size * 1.1f;
+                    at.X += chars[index].Width * size * WidthMult;
                 }
             }
         }
 
         /// <summary>
         /// Measures a String's size in pixels based on the given size
+        /// <para>This method will throw an exception if any of the string's characters are invalid.</para>
         /// </summary>
         /// <param name="size">The size the text is being drawn at</param>
-        /// <param name="text">If I have to explain this parameter, something's wrong with you</param>
+        /// <param name="text">The text to measure</param>
         public Vec2 Measure(float size, String text)
         {
             Vec2 s = new Vec2(0);
@@ -161,14 +195,61 @@ namespace PaintDrawer.Letters
                     if (wid > s.X)
                         s.X = wid;
                     wid = 0;
-                    s.Y += MultilineDiffY * size;
+                    s.Y += MultilineDiffY;
                 }
                 else
-                    wid += chars[text[i]].Width * size;
+                    wid += chars[text[i]].Width;
             }
             if (wid > s.X)
                 s.X = wid;
-            return s;
+
+            return new Vec2(s.X * size * WidthMult, s.Y * size);
+        }
+
+        /// <summary>
+        /// Measures a String's size in pixels based on the given size
+        /// <para>This method will throw an exception if any of the string's characters are invalid.</para>
+        /// </summary>
+        /// <param name="size">The size the text is being drawn at</param>
+        /// <param name="text">The text to measure</param>
+        /// <param name="index">The index to start from</param>
+        /// <param name="length">The amount of characters to measure</param>
+        public Vec2 Measure(float size, String text, int index, int length)
+        {
+            Vec2 s = new Vec2(0);
+            float wid = 0;
+
+            for (int indx = 0; indx < length; indx++)
+            {
+                int i = indx + index;
+                if (text[i] == '\r')
+                    continue;
+
+                if (text[i] == '\n')
+                {
+                    if (wid > s.X)
+                        s.X = wid;
+                    wid = 0;
+                    s.Y += MultilineDiffY;
+                }
+                else
+                    wid += chars[text[i]].Width;
+            }
+            if (wid > s.X)
+                s.X = wid;
+
+            return new Vec2(s.X * size * WidthMult, s.Y * size);
+        }
+
+        /// <summary>
+        /// Measures a chars's size in pixels based on the given size
+        /// <para>This method will throw an exception if the character is invalid.</para>
+        /// </summary>
+        /// <param name="size">The size the text is being drawn at</param>
+        /// <param name="c">The character to measure</param>
+        public float Measure(float size, char c)
+        {
+            return chars[(int)c].Width * size * WidthMult;
         }
 
         /// <summary>
@@ -210,6 +291,79 @@ namespace PaintDrawer.Letters
         /// Calculates the area required for DrawWrapped to work inside the screen bounds. Returns whether the text is valid
         /// </summary>
         public bool CalculateDrawWrappedSize(String text, Vec2 at, float size, float width, out Vec2 drawSize)
+        {
+            drawSize = new Vec2(0);
+            if (!IsStringOk(ref text))
+                return false;
+
+            int nextStartChar = 0, lastSpace = 0, from, to;
+            float builWid = 0;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '\r')
+                    continue;
+
+                if (text[i] == ' ')
+                    lastSpace = i;
+
+                if (text[i] == '\n')
+                {
+                    // flush
+                    from = nextStartChar;
+                    to = lastSpace;
+                    if (from >= to)
+                    {
+                        // no spaces? oh well, cut it in half.
+                        to = i - 1;
+                    }
+                    if (to > from)
+                        drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
+
+                    nextStartChar = Math.Max(to, 0);
+                    while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                    lastSpace = nextStartChar;
+                    drawSize.Y += MultilineDiffY * size;
+                    builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
+                }
+                else
+                {
+                    float tmp = builWid + Measure(size, text[i]);
+                    if (tmp > width)
+                    {
+                        // flush
+                        from = nextStartChar;
+                        to = lastSpace;
+                        if (from >= to)
+                        {
+                            // no spaces? oh well, cut it in half.
+                            to = i - 1;
+                        }
+                        if (to > from)
+                            drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
+
+                        nextStartChar = Math.Max(to, 0);
+                        while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                        lastSpace = nextStartChar;
+                        drawSize.Y += MultilineDiffY * size;
+                        builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
+                    }
+                    else
+                        builWid = tmp;
+                }
+            }
+
+            // flush
+            from = nextStartChar;
+            to = text.Length;
+            if (to > from)
+                drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
+            drawSize.Y += MultilineDiffY * size;
+
+            return true;
+        }
+        
+        /*public bool CalculateDrawWrappedSize(String text, Vec2 at, float size, float width, out Vec2 drawSize)
         {
             drawSize = new Vec2(0);
 
@@ -254,6 +408,6 @@ namespace PaintDrawer.Letters
 
             drawSize.Y = at.Y;
             return true;
-        }
+        }*/
     }
 }

@@ -118,19 +118,25 @@ namespace PaintDrawer
             Console.WriteLine("Stopwatch started. Entering main loop...");
 
             Input.PaintSelectBrush();
-            //new SimpleWrite(font, "Welcome to PaintDrawer! What shall I draw for you, kind sir?").Act();
+            //new SimpleWrite(font, "Welcome to PaintDrawer! What shall I draw for you, kind sir?", 70).Act();
+
+            //System.Text.StringBuilder build = new System.Text.StringBuilder(256);
+            //for (int i = 32; i < CharFont.MaxCharNumericValue; i++)
+            //    if (font.DoesCharExist((char)i))
+            //        build.Append((char)i);
+            //new SimpleWrite(font, build.ToString(), 70).Act();
 
             while (true)
             {
                 Account.AddNewToQueue(queue);
 
-                if (queue.Count == 0 && Time - LastDraw > 5*60)
+                if (queue.Count == 0 && Time - LastDraw > 5 * 60)
                 {
                     // More than X minutes passed since the last draw! Let's add something random then...
                     queue.Enqueue(Actions.Actions.RandomAction);
                 }
 
-                if (queue.Count != 0 && Time - LastDraw > 1*60)
+                if (queue.Count != 0 && Time - LastDraw > 1 * 60)
                 {
                     // Give all texts at least a minute before erasing 'em... and drawing something else
                     Input.PaintClearImage();
@@ -141,8 +147,6 @@ namespace PaintDrawer
                 else
                     Thread.Sleep(2000);
 
-                //new SimpleWrite(font, "hola a todos, este es un texto wrappeado en el paint xdxdxdxd.e\nSi no les gusta, pija.\n\njejejejeje hue hue hue hue hue hue hue hue").Act();
-                //return;
             }
         }
 

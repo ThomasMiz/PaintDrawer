@@ -42,7 +42,7 @@ namespace PaintDrawer.Actions
 
         public void Act()
         {
-            font.DrawWrapped(text, at, size, Stuff.ScreenWidth - at.X - 120);
+            font.DrawWrapped(text, at, size, Stuff.ScreenWidth - at.X - 50);
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace PaintDrawer.Actions
         public static bool IsSizeOk(CharFont font, String text, Vec2 at, float size)
         {
             Vec2 s;
-            if (font.CalculateDrawWrappedSize(text, at, size, Stuff.ScreenWidth - at.X - 120, out s))
-                return at.X + s.X < Stuff.ScreenWidth - 120 && at.Y + s.Y < Stuff.ScreenHeight - 120;
+            if (font.CalculateDrawWrappedSize(text, at, size, Stuff.ScreenWidth - at.X - 50, out s))
+                return at.X + s.X < Stuff.ScreenWidth - 50 && at.Y + s.Y < Stuff.ScreenHeight - 110;
             return false;
         }
 
