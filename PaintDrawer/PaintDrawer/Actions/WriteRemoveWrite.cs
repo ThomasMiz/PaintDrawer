@@ -5,9 +5,11 @@ using System.Threading;
 
 namespace PaintDrawer.Actions
 {
+    /// <summary>
+    /// A simple IAction that writes something and instantly deletes it and writes something else
+    /// </summary>
     class WriteRemoveWrite : IAction
     {
-        CharFont font;
         SimpleWrite first, second;
 
         public WriteRemoveWrite(CharFont font, String txt1, Vec2 off1, float size1, String txt2, Vec2 off2, float size2)

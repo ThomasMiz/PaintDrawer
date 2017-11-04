@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PaintDrawer.Letters
 {
+    /// <summary>
+    /// Encapsulates a two dimensional vector, with X and Y values.
+    /// </summary>
     struct Vec2
     {
         public float X, Y;

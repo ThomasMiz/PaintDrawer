@@ -8,21 +8,28 @@ using System.Threading.Tasks;
 
 namespace PaintDrawer.GMail
 {
+    /// <summary>
+    /// Encapsulates a recieved mail. This might have partial information or full information
+    /// </summary>
     class RecievedMail
     {
         private bool _complete;
+        /// <summary>Gets whether the object has all the mail message's values loaded</summary>
         public bool IsFullyLoaded { get { return _complete; } }
 
         private String _id;
+        /// <summary>Gets the identifier that identifies this mail message</summary>
         public String Id { get { return _id; } }
 
         private String _snippet;
         public String Snippet { get { return _snippet; } }
 
         private String _text;
+        /// <summary>Gets the mail message's body text</summary>
         public String Text { get { return _text; } }
 
         private String _from;
+        /// <summary>Gets the address that sent this mail</summary>
         public String From { get { return _from; } }
 
         private String _subject;
@@ -34,6 +41,10 @@ namespace PaintDrawer.GMail
             this._id = id;
         }
 
+        /// <summary>
+        /// Attempts to fully load the mail. IsFullyLoaded will return true after this if it succeeded.
+        /// </summary>
+        /// <returns>Whether the operation succeeded in loading everything</returns>
         public bool LoadFull()
         {
             try
@@ -63,7 +74,7 @@ namespace PaintDrawer.GMail
                 _complete = true;
                 return true;
             }
-            catch (Exception e)
+            catch //(Exception e)
             {
 
             }

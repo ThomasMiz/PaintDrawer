@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace PaintDrawer.Letters
 {
+    /// <summary>
+    /// Encapsulates an array of bytes and gives methods to read different data types off the stream.
+    /// <para>The byte interpretations are according to ClusterWave data maps. That's because I recycled ClusterWave ScenarioMaker to make this...</para>
+    /// </summary>
     class ByteStream
     {
         byte[] data;
@@ -93,7 +97,7 @@ namespace PaintDrawer.Letters
             return new String(c);
         }
 
-        /// <summary>Reads an integer N and returns a Vector2[] of size N. The elements are read secuentially from the stream.</summary>
+        /// <summary>Reads an integer N and returns a Vector2[] of size N. The elements are read sequentially from the stream.</summary>
         public Vec2[] ReadVector2Array()
         {
             Vec2[] r = new Vec2[ReadInt32()];

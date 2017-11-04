@@ -8,6 +8,9 @@ using System.Drawing;
 
 namespace PaintDrawer
 {
+    /// <summary>
+    /// Contains random bits and pieces that are pretty self explanatory
+    /// </summary>
     static class Stuff
     {
         public static int ScreenWidth, ScreenHeight;

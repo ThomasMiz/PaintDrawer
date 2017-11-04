@@ -7,7 +7,9 @@ namespace PaintDrawer.Letters
 {
     class CharFont
     {
+        /// <summary>The maximum numeric value of characters the font can hold</summary>
         public const int MaxCharNumericValue = 1024;
+
         private const float MultilineDiffY = 1.4f;
 
         public Character[] chars;
@@ -114,6 +116,9 @@ namespace PaintDrawer.Letters
             }
         }
 
+        /// <summary>
+        /// Draws a text without any checking. Just plain fucking does it.
+        /// </summary>
         private void _draw(String text, Vec2 at, float size)
         {
             float startX = at.X;

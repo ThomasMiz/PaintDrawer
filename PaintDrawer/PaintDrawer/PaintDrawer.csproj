@@ -298,9 +298,15 @@
     <None Include="CharFiles\MizConsole\203%3b Ë.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CharFiles\MizConsole\204%3b ifuckugit.map" />
-    <None Include="CharFiles\MizConsole\205%3b ifuckugit.map" />
-    <None Include="CharFiles\MizConsole\206%3b ifuckugit.map" />
+    <None Include="CharFiles\MizConsole\204%3b ifuckugit.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\205%3b ifuckugit.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="CharFiles\MizConsole\206%3b ifuckugit.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CharFiles\MizConsole\210%3b Ò.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

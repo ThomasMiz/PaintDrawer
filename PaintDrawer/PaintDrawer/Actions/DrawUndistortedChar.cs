@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PaintDrawer.Actions
 {
+    /// <summary>
+    /// An IAction for drawing a single undistorted character as scaled up as allowed by the screen dimentions.
+    /// </summary>
     class DrawUndistortedChar : IAction
     {
         Vec2 at;

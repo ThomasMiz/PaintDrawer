@@ -12,10 +12,17 @@ namespace PaintDrawer.Actions
         void Act();
     }
 
+    /// <summary>
+    /// A Static class containing methods for some default random IActions
+    /// </summary>
     static class Actions
     {
         static IAction[] actions;
 
+        /// <summary>
+        /// This method should be called when the application starts
+        /// </summary>
+        /// <param name="font">The CharFont to use to create the IActions</param>
         public static void Init(CharFont font)
         {
             actions = new IAction[]{
