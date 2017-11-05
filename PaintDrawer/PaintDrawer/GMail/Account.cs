@@ -537,13 +537,14 @@ namespace PaintDrawer.GMail
         {
             if (Program.font.IsStringOk(ref text))
             {
-                if (SimpleWrite.IsSizeOk(Program.font, text, SimpleWrite.DefaultAt, SimpleWrite.DefaultSize))
+                /*if (SimpleWrite.IsSizeOk(Program.font, text, SimpleWrite.DefaultAt, SimpleWrite.DefaultSize))
                     queue.Enqueue(new SimpleWrite(Program.font, text));
                 else
                 {
                     Console.ForegroundColor = Colors.Error;
                     Console.WriteLine("[GMail] Text not added. Reason: the text is too big!");
-                }
+                }*/
+                queue.Enqueue(Actions.Actions.CreateSimpleWrite(Program.font, text));
             }
             else
             {

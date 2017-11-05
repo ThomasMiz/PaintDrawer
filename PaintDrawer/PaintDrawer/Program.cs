@@ -15,7 +15,7 @@ namespace PaintDrawer
     {
         public static Stopwatch watch;
         public static double Time { get { return watch.Elapsed.TotalSeconds; } }
-        public static double LastDraw = 0;
+        public static double LastDraw = -9999;
         public static CharFont font;
         public static Queue<IAction> queue;
 
@@ -126,7 +126,7 @@ namespace PaintDrawer
             //        build.Append((char)i);
             //new SimpleWrite(font, build.ToString(), 70).Act();
 
-            new DrawUndistortedChar(font, (char)4).Act();
+            Actions.Actions.CreateSimpleWrite(font, "Este es un mensaje especial! Estas durmiendo en un estado de coma, metimos esto en tu cabeza pero no sabemos a donde va a terminar, no tenemos idea que hacer con vos, por favor despertate! no porque te extrañemos pero yo que se...").Act();
 
             while (true)
             {
