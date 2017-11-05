@@ -87,12 +87,12 @@ namespace PaintDrawer.Letters
                     if (from >= to)
                     {
                         // no spaces? oh well, cut it in half.
-                        to = i - 1;
+                        to = i;
                     }
                     if (to > from)
                         _draw(text.Substring(from, to - from), at, size);
 
-                    nextStartChar = Math.Max(to, 0);
+                    nextStartChar = Math.Max(to + 1, 0);
                     while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
                     lastSpace = nextStartChar;
                     at.Y += MultilineDiffY * size;
@@ -101,7 +101,7 @@ namespace PaintDrawer.Letters
                 else
                 {
                     float tmp = builWid + Measure(size, text[i]);
-                    if (tmp > width)
+                    if (tmp >= width)
                     {
                         // flush
                         from = nextStartChar;
@@ -109,7 +109,7 @@ namespace PaintDrawer.Letters
                         if (from >= to)
                         {
                             // no spaces? oh well, cut it in half.
-                            to = i - 1;
+                            to = i;
                         }
                         if (to > from)
                             _draw(text.Substring(from, to - from), at, size);
@@ -118,7 +118,7 @@ namespace PaintDrawer.Letters
                         while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
                         lastSpace = nextStartChar;
                         at.Y += MultilineDiffY * size;
-                        builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
+                        builWid = Measure(size, text, nextStartChar, i - nextStartChar + 1).X;
                     }
                     else
                         builWid = tmp;
@@ -280,7 +280,7 @@ namespace PaintDrawer.Letters
         /// <returns></returns>
         public bool IsStringOk(ref String s)
         {
-            for(int i=0; i<s.Length; i++)
+            for (int i = 0; i < s.Length; i++)
                 if (!DoesCharExist(s[i]))
                     return false;
             return true;
@@ -315,12 +315,12 @@ namespace PaintDrawer.Letters
                     if (from >= to)
                     {
                         // no spaces? oh well, cut it in half.
-                        to = i - 1;
+                        to = i;
                     }
                     if (to > from)
                         drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
 
-                    nextStartChar = Math.Max(to, 0);
+                    nextStartChar = Math.Max(to + 1, 0);
                     while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
                     lastSpace = nextStartChar;
                     drawSize.Y += MultilineDiffY * size;
@@ -329,7 +329,7 @@ namespace PaintDrawer.Letters
                 else
                 {
                     float tmp = builWid + Measure(size, text[i]);
-                    if (tmp > width)
+                    if (tmp >= width)
                     {
                         // flush
                         from = nextStartChar;
@@ -337,7 +337,7 @@ namespace PaintDrawer.Letters
                         if (from >= to)
                         {
                             // no spaces? oh well, cut it in half.
-                            to = i - 1;
+                            to = i;
                         }
                         if (to > from)
                             drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
@@ -346,7 +346,7 @@ namespace PaintDrawer.Letters
                         while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
                         lastSpace = nextStartChar;
                         drawSize.Y += MultilineDiffY * size;
-                        builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
+                        builWid = Measure(size, text, nextStartChar, i - nextStartChar + 1).X;
                     }
                     else
                         builWid = tmp;
@@ -362,52 +362,5 @@ namespace PaintDrawer.Letters
 
             return true;
         }
-        
-        /*public bool CalculateDrawWrappedSize(String text, Vec2 at, float size, float width, out Vec2 drawSize)
-        {
-            drawSize = new Vec2(0);
-
-            if (!IsStringOk(ref text))
-                return false;
-
-            String[] enterSplit = text.Split('\n');
-            for (int c = 0; c < enterSplit.Length; c++)
-            {
-                String[] split = enterSplit[c].Split(' ');
-                Vec2[] measures = Measure(size, split);
-                float spaceWidth = Measure(size, " ").X;
-
-                float buildWid = 0;
-                StringBuilder builder = new StringBuilder(128);
-                for (int i = 0; i < split.Length; i++)
-                {
-                    if (measures[i].X > width)
-                        return false;
-
-                    float tmp = buildWid + measures[i].X;
-                    if (tmp > width)
-                    {
-                        at.Y += MultilineDiffY * size;
-                        builder.Clear();
-                        builder.Append(split[i]);
-                        builder.Append(' ');
-                        buildWid = measures[i].X + spaceWidth;
-                        at.X = Math.Max(at.X, buildWid);
-                    }
-                    else
-                    {
-                        builder.Append(split[i]);
-                        builder.Append(' ');
-                        buildWid = tmp + spaceWidth;
-                        at.X = Math.Max(at.X, buildWid);
-                    }
-                }
-                
-                at.Y += MultilineDiffY * size;
-            }
-
-            drawSize.Y = at.Y;
-            return true;
-        }*/
     }
 }

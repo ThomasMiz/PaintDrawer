@@ -78,6 +78,18 @@ namespace PaintDrawer
             font = new CharFont("CharFiles/MizConsole/");
             Actions.Actions.Init(font);
 
+            System.Text.StringBuilder builder = new System.Text.StringBuilder(512);
+
+            char c = 'A';
+            while (SimpleWrite.IsSizeOk(font, builder.ToString(), SimpleWrite.DefaultAt, SimpleWrite.DefaultSize))
+            {
+                builder.Append(c++);
+                if (c > 'Z') c = 'A';
+            }
+            builder.Length--;
+
+            Console.WriteLine(builder.Length);
+
             Thread.Sleep(1000);
 
             HwndObject obj;
@@ -126,6 +138,7 @@ namespace PaintDrawer
             //        build.Append((char)i);
             //new SimpleWrite(font, build.ToString(), 70).Act();
 
+            new SimpleWrite(font, builder.ToString()).Act();
             while (true)
             {
                 Account.AddNewToQueue(queue);

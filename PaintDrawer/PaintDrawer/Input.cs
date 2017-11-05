@@ -12,7 +12,7 @@ namespace PaintDrawer
 {
     class Input
     {
-        const float MoveDistance = 12, MoreDistance = MoveDistance + 3; //usual speed is 12
+        const float MoveDistance = 12*5, MoreDistance = MoveDistance + 3; //usual speed is 12
         const float MoveDistanceSquared = MoveDistance * MoveDistance, MoreDistanceSquared = MoreDistance * MoreDistance;
         const int SLPTime = 16;
 

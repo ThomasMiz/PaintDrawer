@@ -25,6 +25,7 @@ namespace PaintDrawer
             r = new Random();
             ScreenWidth = Screen.PrimaryScreen.Bounds.Width;
             ScreenHeight = Screen.PrimaryScreen.Bounds.Height;
+            Actions.SimpleWrite.DefaultSize = 90.0f * ScreenWidth / 1920.0f;
             OperatingSystem = Environment.OSVersion;
 
             Console.ForegroundColor = Colors.Message;
