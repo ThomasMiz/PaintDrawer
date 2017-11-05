@@ -288,7 +288,7 @@ namespace PaintDrawer
             MoveTo(new Point(134, 75));
             RegisterClick();
 
-            MoveTo(new Point(Stuff.ScreenWidth - 50, Stuff.ScreenHeight - 85));
+            MoveTo(new Point(Stuff.ScreenWidth - 30, Stuff.ScreenHeight - 85));
             MouseDown();
             MoveTo(new Point(0, 0));
             MouseUp();

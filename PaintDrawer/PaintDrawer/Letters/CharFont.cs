@@ -83,17 +83,12 @@ namespace PaintDrawer.Letters
                 {
                     // flush
                     from = nextStartChar;
-                    to = lastSpace;
-                    if (from >= to)
-                    {
-                        // no spaces? oh well, cut it in half.
-                        to = i;
-                    }
+                    to = i;
                     if (to > from)
                         _draw(text.Substring(from, to - from), at, size);
 
                     nextStartChar = Math.Max(to + 1, 0);
-                    while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                    while (nextStartChar < text.Length && text[nextStartChar] == '\r') nextStartChar++;
                     lastSpace = nextStartChar;
                     at.Y += MultilineDiffY * size;
                     builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
@@ -114,8 +109,8 @@ namespace PaintDrawer.Letters
                         if (to > from)
                             _draw(text.Substring(from, to - from), at, size);
 
-                        nextStartChar = Math.Max(to, 0);
-                        while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                        nextStartChar = Math.Max(to + 1, 0);
+                        while (nextStartChar < text.Length && text[nextStartChar] == '\r') nextStartChar++;
                         lastSpace = nextStartChar;
                         at.Y += MultilineDiffY * size;
                         builWid = Measure(size, text, nextStartChar, i - nextStartChar + 1).X;
@@ -311,17 +306,12 @@ namespace PaintDrawer.Letters
                 {
                     // flush
                     from = nextStartChar;
-                    to = lastSpace;
-                    if (from >= to)
-                    {
-                        // no spaces? oh well, cut it in half.
-                        to = i;
-                    }
+                    to = i;
                     if (to > from)
                         drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
 
                     nextStartChar = Math.Max(to + 1, 0);
-                    while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                    while (nextStartChar < text.Length && text[nextStartChar] == '\r') nextStartChar++;
                     lastSpace = nextStartChar;
                     drawSize.Y += MultilineDiffY * size;
                     builWid = Measure(size, text, nextStartChar, i - nextStartChar).X;
@@ -342,8 +332,8 @@ namespace PaintDrawer.Letters
                         if (to > from)
                             drawSize.X = Math.Max(drawSize.X, Measure(size, text.Substring(from, to - from)).X);
 
-                        nextStartChar = Math.Max(to, 0);
-                        while (nextStartChar < text.Length && (text[nextStartChar] == ' ' || text[nextStartChar] == '\r')) nextStartChar++;
+                        nextStartChar = Math.Max(to + 1, 0);
+                        while (nextStartChar < text.Length && text[nextStartChar] == '\r') nextStartChar++;
                         lastSpace = nextStartChar;
                         drawSize.Y += MultilineDiffY * size;
                         builWid = Measure(size, text, nextStartChar, i - nextStartChar + 1).X;

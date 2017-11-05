@@ -127,6 +127,7 @@ namespace PaintDrawer
             //new SimpleWrite(font, build.ToString(), 70).Act();
 
             //Actions.Actions.CreateSimpleWrite(font, "Este es un mensaje especial! Estas durmiendo en un estado de coma, metimos esto en tu cabeza pero no sabemos a donde va a terminar, no tenemos idea que hacer con vos, por favor despertate! no porque te extrañemos pero yo que se...").Act();
+            LastDraw = -60;
 
             while (true)
             {
