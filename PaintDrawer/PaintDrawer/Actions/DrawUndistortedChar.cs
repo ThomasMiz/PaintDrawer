@@ -17,16 +17,19 @@ namespace PaintDrawer.Actions
         Character character;
         char c;
 
-        public DrawUndistortedChar(CharFont font, Vec2 at, char c)
+        public DrawUndistortedChar(CharFont font, Vec2 min, Vec2 max, char c)
         {
             this.c = c;
-            this.at = at;
             character = font.chars[c];
-            scale = Math.Min((Stuff.ScreenWidth - at.X - 100) / character.Width, (Stuff.ScreenHeight - at.Y - 150) / character.Height);
+            Vec2 size = new Vec2(max.X - min.X, max.Y - min.Y);
+            scale = Math.Min(size.X / character.Width, size.Y / character.Height) * 0.925f;
+
+            Vec2 center = new Vec2(min.X + size.X * 0.5f, min.Y + size.Y * 0.5f);
+            at = new Vec2(center.X - character.Width * scale * 0.5f, center.Y - character.Height * scale * 0.5f);
         }
 
         public DrawUndistortedChar(CharFont font, char c)
-            : this(font, SimpleWrite.DefaultAt, c)
+            : this(font, SimpleWrite.DefaultAt, new Vec2(Stuff.ScreenWidth - 30, Stuff.ScreenHeight - 127), c)
         {
 
         }
