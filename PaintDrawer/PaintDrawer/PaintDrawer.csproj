@@ -457,6 +457,9 @@
     <None Include="CharFiles\MizConsole\2%3b mazal.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="CharFiles\MizConsole\160%3b idk.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="CharFiles\MizConsole\960%3b π.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
